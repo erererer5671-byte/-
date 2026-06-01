@@ -628,6 +628,13 @@ export default function App() {
     setGameState({ ...gameState, playersByClub: updatedPlayersByClub });
   };
 
+  const handleUpdateUserSquad = (updatedSquad: any[]) => {
+    if (!gameState) return;
+    const updatedPlayersByClub = { ...gameState.playersByClub };
+    updatedPlayersByClub[gameState.userClubId] = updatedSquad;
+    setGameState({ ...gameState, playersByClub: updatedPlayersByClub });
+  };
+
   const handleUpdateBudgetDirect = (amount: number) => {
     if (!gameState) return;
     const { userClubId, clubs } = gameState;
@@ -679,6 +686,8 @@ export default function App() {
           }}
           userClubName={gameState ? gameState.clubs.find(c => c.id === gameState.userClubId)?.name : "ريد بول لايبزيغ"}
           userClubBudget={gameState ? gameState.clubs.find(c => c.id === gameState.userClubId)?.budget : 120}
+          gameState={gameState}
+          setGameState={setGameState}
         />
       </div>
     );
@@ -857,6 +866,9 @@ export default function App() {
             onUpdateTactics={handleUpdateTactics}
             onUpdateSquadStatus={handleUpdateSquadStatus}
             onSwapPlayers={handleSwapPlayers}
+            onUpdatePlayers={handleUpdateUserSquad}
+            userClub={userClub}
+            onUpdateBudget={handleUpdateBudgetDirect}
           />
         )}
 
