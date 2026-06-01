@@ -1260,19 +1260,26 @@ export default function GameDesignDocument({ onBackToGame, userClubName = "ري�
                         className={`text-right p-3 rounded-lg border text-xs transition ${developmentPlan === 'balanced' ? 'bg-zinc-900 border-emerald-500/60 text-white' : 'border-zinc-850 text-zinc-450 hover:bg-zinc-900/30'}`}
                       >
                         <strong className="block text-white mb-1">التدريب الدوري المتوازن</strong>
-                        <span>تأهيل تدريجي لجميع الجوانب البدنية والفنية بالتساوي.</span>
+                        <span>تأهيل تدريجي لجميع الجوانب البدنية والفنية بالتساوي دون تركيز مفرط.</span>
                       </button>
                     </div>
 
-                    <div className="bg-zinc-900 rounded-xl p-4 border border-zinc-800 flex justify-between items-center">
-                      <div className="space-y-1">
-                        <span className="text-[10px] text-emerald-400 block uppercase tracking-widest font-mono">النتيجة التقديرية للخطة:</span>
-                        <p className="text-xs text-white mt-1 leading-snug">{calculateDevelopmentOutcome().attributeUpgraded}</p>
-                      </div>
-                      <div className="text-left py-1 px-3 bg-zinc-950 border border-zinc-850 rounded-lg shrink-0">
-                        <span className="text-[9px] text-zinc-500 block">الفترة المتوقعة</span>
-                        <strong className="text-sm text-white font-extrabold">{calculateDevelopmentOutcome().weeks} أسبوع</strong>
-                      </div>
+                    <div className="flex justify-end gap-2 text-xs pt-4 border-t border-zinc-900">
+                      <button
+                        onClick={() => {
+                          const upgraded = { ...selectedYouthPlayer };
+                          upgraded.currentOvr = Math.min(upgraded.potential, upgraded.currentOvr + 1);
+                          upgraded.physicality = Math.min(100, upgraded.physicality + 2);
+                          setSelectedYouthPlayer(upgraded);
+                          setDataPackLog(prev => [
+                            `[الشباب] خطة ترقية مكللة بالنجاح للموهبة "${upgraded.name}" (OVR: ${upgraded.currentOvr}) بنسق: ${developmentPlan === 'balanced' ? 'متوازن' : developmentPlan === 'reposition' ? 'إعادة مركز' : 'لياقة هجومية'}`,
+                            ...prev
+                          ]);
+                        }}
+                        className="bg-emerald-500 hover:bg-emerald-450 text-zinc-950 font-bold px-5 py-2 rounded-xl transition cursor-pointer"
+                      >
+                        تطبيق خطة تدريب الغد وتحديث OVR ⚡
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -1281,132 +1288,162 @@ export default function GameDesignDocument({ onBackToGame, userClubName = "ري�
           )}
 
           {/* =======================================================
-              SECTION 5: MAN MANAGEMENT & MEDIA
+              SECTION 5: CLUB MANAGEMENT & EXPENSES
               ======================================================= */}
           {activeSection === 'management' && (
-            <div className="space-y-6 animate-fade-in">
+            <div className="space-y-6 animate-fade-in font-sans text-right" dir="rtl">
               <div className="bg-zinc-900 border border-zinc-855 rounded-2xl p-6">
-                <div className="flex items-center gap-2 mb-4 text-emerald-400">
-                  <Heart className="w-6 h-6" />
-                  <h2 className="text-xl font-extrabold text-white">5. إدارة غرف الملابس والإعلام (Man Management & Media)</h2>
+                <div className="flex items-center gap-2 mb-4 text-emerald-400 justify-start">
+                  <Landmark className="w-6 h-6" />
+                  <h2 className="text-xl font-extrabold text-white text-right">5. تطلعات مجلس الإدارة والاتصال الصحفي (Board Expectations & Press Conferences)</h2>
                 </div>
 
-                <div className="text-zinc-300 text-sm leading-relaxed space-y-4">
+                <div className="text-zinc-300 text-sm leading-relaxed space-y-4 text-right">
                   <p>
-                    <strong>ديناميكية المؤتمرات الصحفية وغرف تبديل الملابس:</strong> القرارات لا تؤخذ في عزلة. المؤتمرات الصحفية قبل وبعد المباريات هامت جداً؛ إجابتك الفضفاضة أو هجومك الصريح قد يعمقان من فجوة الالتزام بين رفقاء الفريق.
+                    لا تنحصر أهدافك بالفوز على المستطيل الأخضر فحسب، فمجلس الإدارة يراقب أدائك المالي والترويجي وتطوير اللاعبين الشباب بدقة بالغة. الإخلال بهذه التطلعات مع تراجع الثقة قد يؤدي إلى إقالتك الفورية!
                   </p>
 
-                  <ul className="list-disc list-inside space-y-2 pr-4 text-zinc-350 text-xs">
-                    <li>
-                      <strong className="text-white">التعامل مع شكاوى اللاعبين العاجلة:</strong> يمتلك اللاعب في التشكيلة مؤشراً للمطالبة بزيادة وقت اللعب (Play-Time). إهمال الطلب الطويل يخفض من روحه المعنوية (Morale) تلقائياً، والنتيجة الحتمية هي عدم الالتزام بالتعليمات التكتيكية وتدمير الـ Cohesion.
-                    </li>
-                    <li>
-                      <strong className="text-white">تأثير الصحافة على ثقة الإدارة:</strong> مجلس الإدارة يملك مؤشر ثقة ومخاوف مستقلة تتراجع مباشرة في حال تصريحاتك السلبية المناهضة لمقترحاتهم وميزانيات النادي التعاقدية.
-                    </li>
-                  </ul>
+                  <h3 className="font-bold text-white text-base mt-6 text-emerald-405 border-r-2 border-emerald-500 pr-2">ركائز تقييم ثقة مجلس الإدارة:</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-2 text-xs">
+                    <div className="bg-zinc-950 p-4 rounded-xl border border-zinc-850 text-right">
+                      <span className="text-zinc-500 block mb-1">النمو المحلي 🏆</span>
+                      <strong className="text-white">Domestic Success:</strong>
+                      <p className="text-zinc-450 leading-relaxed mt-1">تحديد ترتيب النادي المطلوب بالدوري (مثال: مركز مؤهل لإفريقيا أو آسيا) والمحافظة على تصاعد النتائج.</p>
+                    </div>
+
+                    <div className="bg-zinc-950 p-4 rounded-xl border border-zinc-850 text-right">
+                      <span className="text-zinc-550 block mb-1">النمور والمالية 💸</span>
+                      <strong className="text-white">Financial Target:</strong>
+                      <p className="text-zinc-450 leading-relaxed mt-1">ترشيد النفقات، تحقيق أرباح من صفقات البيع دون تخطي نسبة الأكاديمية المطلوبة والمحافظة على ميزانية مستقرة.</p>
+                    </div>
+
+                    <div className="bg-zinc-950 p-4 rounded-xl border border-zinc-850 text-right">
+                      <span className="text-zinc-550 block mb-1">تطوير الشباب 🌱</span>
+                      <strong className="text-white">Youth Development:</strong>
+                      <p className="text-zinc-450 leading-relaxed mt-1">الاستعانة بـ 3 ناشئين مغمورين على الأقل من الأكاديمية كـ لاعبين أساسيين لفترة كافية ورفع قيمتهم السوقية.</p>
+                    </div>
+
+                    <div className="bg-zinc-950 p-4 rounded-xl border border-zinc-850 text-right">
+                      <span className="text-zinc-550 block mb-1">الشهرة العالمية 🌍</span>
+                      <strong className="text-white">Brand Exposure:</strong>
+                      <p className="text-zinc-450 leading-relaxed mt-1">صنع صفقات مع نجوم سوپرستار لرفع مبيعات التذاكر والقمصان ومضاعفة العوائد والتدفق الترويجي للنادي.</p>
+                    </div>
+                  </div>
                 </div>
               </div>
 
               {/* Interactive Widget for Section 5 */}
-              <div className="bg-zinc-905 border border-zinc-800 rounded-2xl p-6">
-                <div className="flex items-center gap-2 mb-4 text-emerald-400">
-                  <Gauge className="w-5 h-5 animate-pulse" />
-                  <h3 className="text-sm font-bold uppercase text-white">محاكي المؤتمرات الصحفية وغرفة خلع الملابس (Press Room Simulator)</h3>
-                </div>
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                {/* Board expectations check */}
+                <div className="lg:col-span-5 bg-zinc-900 border border-zinc-850 rounded-2xl p-5 flex flex-col justify-between">
+                  <div>
+                    <h3 className="text-xs font-bold text-white mb-2 flex items-center gap-1.5 justify-start">
+                      <Sliders className="w-4 h-4 text-emerald-400" />
+                      لوحة قياس الثقة واستقرار الإدارة التفاعلي
+                    </h3>
+                    <p className="text-[10px] text-zinc-500 mb-4 text-right">اختبر محاكاة قراراتك على مؤشر الرضا الفعلي لمجلس الإدارة والمالكين:</p>
 
-                <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
-                  {/* Left Controls/Questions */}
-                  <div className="md:col-span-6 space-y-4">
-                    <div className="flex gap-2">
-                      <button
-                        onClick={() => {
-                          setSelectedPressQuestionId(0);
-                          setLastAnswerCommentary("اختر أحد البدائل السلوكية أدناه لقياس التأثير الفوري.");
-                        }}
-                        className={`flex-1 py-2 text-xs font-bold rounded-lg transition ${selectedPressQuestionId === 0 ? 'bg-zinc-900 border border-emerald-500/30' : 'bg-zinc-950 text-zinc-500'}`}
-                      >
-                        السؤال الأول (مشكلة لاعب)
-                      </button>
-                      <button
-                        onClick={() => {
-                          setSelectedPressQuestionId(1);
-                          setLastAnswerCommentary("اختر أحد البدائل السلوكية أدناه لقياس التأثير الفوري.");
-                        }}
-                        className={`flex-1 py-2 text-xs font-bold rounded-lg transition ${selectedPressQuestionId === 1 ? 'bg-zinc-900 border border-emerald-500/30' : 'bg-zinc-950 text-zinc-500'}`}
-                      >
-                        السؤال الثاني (سوق الانتقالات)
-                      </button>
-                    </div>
-
-                    <div className="bg-zinc-950 p-4 border border-zinc-850 rounded-xl space-y-3">
-                      <span className="text-[10px] text-sky-400 font-bold block uppercase tracking-wider">سؤال مندوب قنوات الكأس الرياضية:</span>
-                      <p className="text-xs text-zinc-200 font-medium leading-relaxed">
-                        "{pressQuestions[selectedPressQuestionId].question}"
-                      </p>
-                    </div>
-
-                    <div className="space-y-2">
-                      <span className="text-[10px] text-zinc-500 block">اختر إجابة المدرب الرسمية للصحافة:</span>
-                      {pressQuestions[selectedPressQuestionId].answers.map((ans, idx) => (
-                        <button
-                          key={idx}
-                          onClick={() => handleSelectAnswer(ans.moraleEffect, ans.boardEffect, ans.fanEffect, ans.comment)}
-                          className="w-full text-right p-3 bg-zinc-900 hover:bg-zinc-850 border border-zinc-800 rounded-xl text-xs text-zinc-350 transition leading-snug"
-                        >
-                          {ans.text}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Right Metrics and dynamic response commentary */}
-                  <div className="md:col-span-6 bg-zinc-950 border border-zinc-850 rounded-xl p-5 flex flex-col justify-between gap-6">
                     <div className="space-y-4">
-                      <span className="text-[10px] text-zinc-500 block font-mono">التقرير والتحرك المؤشر الفوري (Live Impact Dashboard)</span>
-                      
-                      <div className="space-y-3">
-                        <div className="space-y-1">
-                          <div className="flex justify-between text-xs font-bold">
-                            <span>معنويات اللاعبين (Players Morale)</span>
-                            <span className="text-emerald-450">{pressConferenceMetrics.morale}%</span>
-                          </div>
-                          <div className="w-full bg-zinc-900 h-2 rounded-full overflow-hidden">
-                            <div className="bg-emerald-500 h-full transition-all duration-300" style={{ width: `${pressConferenceMetrics.morale}%` }}></div>
-                          </div>
+                      {/* Stat 1 */}
+                      <div>
+                        <div className="flex justify-between text-xs mb-1">
+                          <span className="text-zinc-400">رضا الإدارة العام (Rating):</span>
+                          <span className="text-emerald-400 font-bold font-mono">{pressConferenceMetrics.boardTrust}%</span>
                         </div>
-
-                        <div className="space-y-1">
-                          <div className="flex justify-between text-xs font-bold">
-                            <span>ثقة مجلس الإدارة (Board Trust)</span>
-                            <span className="text-sky-400">{pressConferenceMetrics.boardTrust}%</span>
-                          </div>
-                          <div className="w-full bg-zinc-900 h-2 rounded-full overflow-hidden">
-                            <div className="bg-sky-500 h-full transition-all duration-300" style={{ width: `${pressConferenceMetrics.boardTrust}%` }}></div>
-                          </div>
+                        <div className="w-full bg-zinc-950 h-1.5 rounded-full overflow-hidden">
+                          <div className="bg-emerald-500 h-full rounded-full transition-all duration-300" style={{ width: `${pressConferenceMetrics.boardTrust}%` }}></div>
                         </div>
+                      </div>
 
-                        <div className="space-y-1">
-                          <div className="flex justify-between text-xs font-bold">
-                            <span>رضا الجماهير الكروية (Fans)</span>
-                            <span className="text-amber-450">{pressConferenceMetrics.fanSatisfaction}%</span>
-                          </div>
-                          <div className="w-full bg-zinc-900 h-2 rounded-full overflow-hidden">
-                            <div className="bg-amber-500 h-full transition-all duration-300" style={{ width: `${pressConferenceMetrics.fanSatisfaction}%` }}></div>
-                          </div>
+                      {/* Stat 2 */}
+                      <div>
+                        <div className="flex justify-between text-xs mb-1">
+                          <span className="text-zinc-400">سعادة ومعنويات اللاعبين (Morale):</span>
+                          <span className="text-sky-400 font-bold font-mono">{pressConferenceMetrics.morale}%</span>
+                        </div>
+                        <div className="w-full bg-zinc-950 h-1.5 rounded-full overflow-hidden">
+                          <div className="bg-sky-500 h-full rounded-full transition-all duration-300" style={{ width: `${pressConferenceMetrics.morale}%` }}></div>
+                        </div>
+                      </div>
+
+                      {/* Stat 3 */}
+                      <div>
+                        <div className="flex justify-between text-xs mb-1">
+                          <span className="text-zinc-400">شهرة النادي جماهيرياً (Fans):</span>
+                          <span className="text-purple-400 font-bold font-mono">{pressConferenceMetrics.fanSatisfaction}%</span>
+                        </div>
+                        <div className="w-full bg-zinc-950 h-1.5 rounded-full overflow-hidden">
+                          <div className="bg-purple-500 h-full rounded-full transition-all duration-300" style={{ width: `${pressConferenceMetrics.fanSatisfaction}%` }}></div>
                         </div>
                       </div>
                     </div>
+                  </div>
 
-                    <div className="bg-zinc-900/50 p-4 rounded-xl border border-zinc-850 border-r-4 border-r-emerald-500 text-xs text-zinc-300 leading-relaxed">
-                      <strong>تحليل ردود الفعل:</strong> {lastAnswerCommentary}
-                    </div>
-
+                  <div className="mt-6 border-t border-zinc-850 pt-4 text-center">
                     <button
-                      onClick={() => setPressConferenceMetrics({ morale: 65, boardTrust: 70, fanSatisfaction: 60 })}
-                      className="text-[10px] bg-zinc-900 hover:bg-zinc-850 hover:text-white text-zinc-500 py-1.5 px-3 rounded border border-zinc-850 self-end flex items-center gap-1.5"
+                      onClick={() => {
+                        setPressConferenceMetrics({ boardTrust: 70, morale: 65, fanSatisfaction: 60 });
+                        setLastAnswerCommentary("تمت إعادة ضبط مؤشرات ثقة الإدارة والروح المعنوية للبدء من جديد.");
+                        setDataPackLog(prev => [
+                          `[مجلس الإدارة] إعادة ضبط مؤشرات الأداء والرضا الكلي إلى القواعد القياسية المعتمدة V2.6`,
+                          ...prev
+                        ]);
+                      }}
+                      className="text-[10px] text-zinc-500 hover:text-emerald-400 font-bold underline transition cursor-pointer"
                     >
-                      <RefreshCcw className="w-3 h-3" /> إعادة ضبط المؤشرات الافتراضية
+                      إعادة تصفير ومعايرة قياسات المؤشرات 🔄
                     </button>
+                  </div>
+                </div>
+
+                {/* Press Conference Simulator Widget */}
+                <div className="lg:col-span-7 bg-zinc-900 border border-zinc-850 rounded-2xl p-5 space-y-4">
+                  <h3 className="text-xs font-bold text-white flex items-center gap-1.5 justify-start">
+                    <Radio className="w-4 h-4 text-emerald-400" />
+                    المؤتمرات الصحفية للصحفي الذكي (Press Conference Simulator)
+                  </h3>
+                  <p className="text-[10px] text-zinc-500 text-right">اقرأ تساؤلات الصحافة واختر الرد الاستراتيجي المناسب:</p>
+
+                  {/* Ask list */}
+                  <div className="flex gap-2 mb-2 justify-start">
+                    {pressQuestions.map((q) => (
+                      <button
+                        key={q.id}
+                        onClick={() => setSelectedPressQuestionId(q.id)}
+                        className={`text-[10px] font-bold px-3 py-1.5 border rounded-lg transition-all cursor-pointer ${selectedPressQuestionId === q.id ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-300' : 'bg-transparent border-zinc-800 text-zinc-500'}`}
+                      >
+                        سؤال {q.id + 1} 🎤
+                      </button>
+                    ))}
+                  </div>
+
+                  <div className="bg-zinc-950 p-4 border border-zinc-850 rounded-xl space-y-2 text-right">
+                    <div className="flex items-center gap-2 text-emerald-400 text-xs justify-start flex-row">
+                      <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse shrink-0"></span>
+                      <strong>الصحفي الرياضي:</strong>
+                    </div>
+                    <p className="text-xs text-zinc-350 leading-relaxed font-bold text-right">
+                      "{pressQuestions[selectedPressQuestionId].question}"
+                    </p>
+                  </div>
+
+                  {/* Answers list */}
+                  <div className="space-y-2 pt-2 text-xs text-right">
+                    {pressQuestions[selectedPressQuestionId].answers.map((answer, index) => (
+                      <button
+                        key={index}
+                        onClick={() => handleSelectAnswer(answer.moraleEffect, answer.boardEffect, answer.fanEffect, answer.comment)}
+                        className="w-full text-right bg-zinc-950 hover:bg-emerald-500/10 hover:border-emerald-500/30 border border-zinc-850 rounded-xl p-3 transition text-zinc-350 hover:text-white cursor-pointer block"
+                      >
+                        {answer.text}
+                      </button>
+                    ))}
+                  </div>
+
+                  {/* Feedback commentary */}
+                  <div className="bg-zinc-950 p-3 border border-zinc-850 rounded-xl text-[10px] text-zinc-400 text-right">
+                    <strong className="text-white block mb-1">التعليق الرياضي الفوري:</strong>
+                    <span>{lastAnswerCommentary}</span>
                   </div>
                 </div>
               </div>
@@ -1417,10 +1454,10 @@ export default function GameDesignDocument({ onBackToGame, userClubName = "ري�
               SECTION 6: MATCH SIMULATION OPTIONS
               ======================================================= */}
           {activeSection === 'match' && (
-            <div className="space-y-6 animate-fade-in">
+            <div className="space-y-6 animate-fade-in font-sans text-right" dir="rtl">
               <div className="bg-zinc-900 border border-zinc-855 rounded-2xl p-6">
-                <div className="flex items-center gap-2 mb-4 text-emerald-400">
-                  <Radio className="w-6 h-6" />
+                <div className="flex items-center gap-2 mb-4 text-emerald-450 justify-start flex-row-reverse text-right">
+                  <Radio className="w-6 h-6 animate-pulse" />
                   <h2 className="text-xl font-extrabold text-white">6. نظام محاكاة المباريات (Match Simulation Options)</h2>
                 </div>
 
@@ -1429,49 +1466,68 @@ export default function GameDesignDocument({ onBackToGame, userClubName = "ري�
                     لتلبية جميع مستويات اللاعبين، تتيح اللعبة 3 آليات رئيسية لإدارة اللقاءات واكتساب الثقة:
                   </p>
 
-                  <ul className="list-disc list-inside space-y-2 pr-4 text-zinc-350 text-xs">
+                  <ul className="list-disc list-inside space-y-2 pr-4 text-zinc-350 text-xs text-right" dir="rtl">
                     <li>
-                      <strong className="text-white">اللعب الفعلي باللاعب (Manual Control):</strong> التحكم الكامل بالكرة والمراوغة المباشرة والتسديد الكلاسيكي، مما يضع نتائج المباراة بكاملها في يد يد مهاراتك الفردية باللعبة الكروية.
+                      <strong className="text-white">اللعب الفعلي باللاعب (Manual Control):</strong> التحكم الكامل بالكرة والمراوغة المباشرة والتسديد الكلاسيكي، مما يضع نتائج المباراة بكاملها في يد يد تحرييكك وأسلوب لعب اللاعب على أرض الريندر.
                     </li>
                     <li>
-                      <strong className="text-white">المحاكاة البصرية السريعة (Interactive Fast Visual SIM):</strong> محرك خوارزمي يجسد رادار تحركات اللاعبين ثنائي الأبعاد في الملعب، مع إتاحة إمكانية التدخل التكتيكي المباشر للمدرب وتغيير أسلوب الضغط في حالة الطرد أو إصابة المدافع الأساسي.
+                      <strong className="text-white">المحاكاة البصرية السريعة (Visual Sim):</strong> تتيح لك توجيه اللاعبين من خط التماس عبر خيارات سريعة وتغيير التكتيكات ورؤية تحركات اللاعبين كـ دوائر ملونة ثنائية الأبعاد على لوحة خطط تفاعلية.
                     </li>
                     <li>
-                      <strong className="text-white">المحاكاة الفورية السريعة (Instant SIM):</strong> الحصول الفوري على النتيجة بضغطة زر واحدة. يعتمد هذا تماماً على القيمة الإحصائية OVR وانسجام الخطوط ومطابقة الهوية التكتيكية للاعبين بالتكتيك المستمر.
+                      <strong className="text-white">المحاكاة الفورية (Instant Sim):</strong> تخطي المباراة بالكامل وحساب النتيجة فورياً بناءً على تقييمات اللاعبين والروح المعنوية وقاطعي الكرات وعامل الأرض.
                     </li>
                   </ul>
                 </div>
               </div>
 
-              {/* Interactive Widget for Section 6 */}
-              <div className="bg-zinc-905 border border-zinc-800 rounded-2xl p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center gap-2 text-emerald-400">
-                    <Sliders className="w-5 h-5 animate-pulse" />
-                    <h3 className="text-sm font-bold uppercase text-white">لوحة تحكم خوارزميات محاكاة المباريات (Match Simulation Sandbox)</h3>
-                  </div>
-                  <span className="text-[10px] bg-red-950/20 text-red-400 border border-red-500/15 px-2 py-0.5 rounded font-bold">نموذج فني لمحللي البيانات</span>
+              {/* Sandbox Simulation Widget */}
+              <div className="bg-zinc-905 border border-zinc-800 rounded-2xl p-6 text-right" dir="rtl">
+                <div className="flex items-center gap-2 mb-4 text-emerald-400 justify-start flex-row-reverse text-right">
+                  <Flame className="w-5 h-5" />
+                  <h3 className="text-sm font-bold uppercase text-white">محاكي المباراة التكتيكية السريع (Tactical Match Simulation Speed Sandbox)</h3>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
-                  <div className="md:col-span-5 bg-zinc-950 p-4 border border-zinc-850 rounded-xl space-y-4">
-                    <div>
-                      <label className="text-[11px] text-zinc-400 block mb-1">النهج الهجومي في صناعة الألعاب:</label>
-                      <select
-                        value={tacticalInstinct}
-                        onChange={(e) => setTacticalInstinct(e.target.value as any)}
-                        className="w-full bg-zinc-900 border border-zinc-800 rounded-lg p-2 text-xs text-white focus:outline-none"
-                      >
-                        <option value="balanced">نهج كروي متزن (Balanced)</option>
-                        <option value="aggressive">نهج هجومي هجومي كاسح (Aggressive)</option>
-                        <option value="defensive">نهج تكتل هادئ منظم (Defensive)</option>
-                      </select>
+                <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
+                  {/* Controls */}
+                  <div className="md:col-span-5 space-y-5">
+                    <div className="space-y-2">
+                      <span className="text-[10px] text-zinc-500 block">الغريزة التكتيكية للفريق:</span>
+                      <div className="flex gap-2">
+                        {(['aggressive', 'balanced', 'defensive'] as const).map((style) => (
+                          <button
+                            key={style}
+                            onClick={() => setTacticalInstinct(style)}
+                            className={`flex-1 py-1.5 px-2 text-[11px] font-bold rounded-lg border transition cursor-pointer ${
+                              tacticalInstinct === style
+                                ? 'bg-zinc-900 border-emerald-500/50 text-emerald-400'
+                                : 'bg-zinc-950 border-zinc-850 text-zinc-500'
+                            }`}
+                          >
+                            {style === 'aggressive' ? 'هجومي ضاغط' : style === 'defensive' ? 'دفاعي منخفض' : 'متوازن'}
+                          </button>
+                        ))}
+                      </div>
                     </div>
 
-                    <div>
-                      <div className="flex justify-between text-[11px] text-zinc-400 mb-1">
-                        <span>معامل دقة التهديف الدوري (Goals Rate):</span>
-                        <span className="text-emerald-400 font-extrabold">x{goalFreqMultiplier}</span>
+                    <div className="space-y-2">
+                      <div className="flex justify-between text-[11px]">
+                        <span className="text-zinc-550">نسبة الاستحواذ المستهدفة:</span>
+                        <span className="text-emerald-450 font-mono font-bold">{possessionWeight}%</span>
+                      </div>
+                      <input
+                        type="range"
+                        min="20"
+                        max="80"
+                        value={possessionWeight}
+                        onChange={(e) => setPossessionWeight(Number(e.target.value))}
+                        className="w-full accent-emerald-500"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <div className="flex justify-between text-[11px]">
+                        <span className="text-zinc-550">مضاعف تكرار الأهداف:</span>
+                        <span className="text-emerald-450 font-mono font-bold">x{goalFreqMultiplier.toFixed(1)}</span>
                       </div>
                       <input
                         type="range"
@@ -1484,55 +1540,38 @@ export default function GameDesignDocument({ onBackToGame, userClubName = "ري�
                       />
                     </div>
 
-                    <div>
-                      <div className="flex justify-between text-[11px] text-zinc-400 mb-1">
-                        <span>نسبة الاستحواذ المستهدفة:</span>
-                        <span className="text-sky-400 font-extrabold">{possessionWeight}%</span>
-                      </div>
-                      <input
-                        type="range"
-                        min="30"
-                        max="75"
-                        value={possessionWeight}
-                        onChange={(e) => setPossessionWeight(Number(e.target.value))}
-                        className="w-full accent-emerald-500"
-                      />
-                    </div>
-
                     <button
                       onClick={handleSimulateSandboxMatch}
                       disabled={simInProgress}
-                      className="w-full bg-emerald-500 hover:bg-emerald-450 disabled:bg-zinc-800 text-zinc-950 font-black py-2.5 rounded-lg text-xs transition uppercase tracking-wide flex items-center justify-center gap-2"
+                      className="w-full bg-emerald-500 hover:bg-emerald-400 disabled:bg-zinc-800 disabled:text-zinc-650 text-zinc-950 font-bold text-xs py-2.5 rounded-xl transition cursor-pointer flex items-center justify-center gap-1.5"
                     >
-                      {simInProgress ? "جاري تشغيل محاكي المباراة..." : "محاكاة مباراة تجريبية 🎮"}
+                      {simInProgress ? (
+                        <>
+                          <div className="w-3.5 h-3.5 border-2 border-zinc-950 border-t-transparent rounded-full animate-spin"></div>
+                          <span>جاري تشغيل محرك المحاكاة الحركية...</span>
+                        </>
+                      ) : (
+                        <span>بدء محاكاة المباراة التكتيكية ⚽</span>
+                      )}
                     </button>
                   </div>
 
-                  <div className="md:col-span-7 bg-zinc-955 rounded-xl border border-zinc-850 p-4 h-full flex flex-col justify-between min-h-[220px]">
-                    <div className="space-y-1.5 max-h-[140px] overflow-y-auto">
-                      <span className="text-[10px] text-zinc-500 block uppercase font-mono tracking-widest">مخرجات أحداث المباراة الفعلية والتعليق:</span>
-                      
-                      {sandboxMatchLog.length === 0 ? (
-                        <div className="text-xs text-zinc-550 italic h-24 flex items-center justify-center">
-                          اضغط على زر المحاكاة لبدء تشغيل محرك البيانات تكتيكياً.
-                        </div>
-                      ) : (
-                        <div className="space-y-1">
-                          {sandboxMatchLog.map((log, lIdx) => (
-                            <div key={lIdx} className="text-xs text-zinc-300 font-mono leading-relaxed bg-zinc-900/40 p-1.5 rounded border border-zinc-850/50">
+                  {/* Log console representation */}
+                  <div className="md:col-span-7 bg-zinc-950 border border-zinc-850 rounded-xl p-4 flex flex-col justify-between min-h-[220px]">
+                    <div className="space-y-2">
+                      <span className="text-[10px] text-zinc-500 block uppercase font-mono border-b border-zinc-900 pb-2">شريط أحداث ومجريات المباراة الحية (Match Events Real-time Log)</span>
+                      <div className="space-y-2 max-h-[180px] overflow-y-auto pl-1 pr-1 text-right" dir="rtl">
+                        {sandboxMatchLog.length === 0 ? (
+                          <p className="text-[11px] text-zinc-600 italic py-6 text-center">اضغط على زر البدء لتشغيل المحاكاة ورؤية مجريات اللعب وحساب الأهداف والفرص الضائعة بدقة.</p>
+                        ) : (
+                          sandboxMatchLog.map((log, idx) => (
+                            <p key={idx} className="text-xs text-zinc-400 leading-relaxed bg-zinc-900/40 p-2 rounded border border-zinc-900 font-sans">
                               {log}
-                            </div>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-
-                    {sandboxMatchLog.length > 0 && (
-                      <div className="border-t border-zinc-900 pt-3 mt-3 flex justify-between text-[10px] text-zinc-505">
-                        <span>دقة خوارزميات محرك FC 26</span>
-                        <span className="text-emerald-455">الوضع الفعال نشط (Active)</span>
+                            </p>
+                          ))
+                        )}
                       </div>
-                    )}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -1540,360 +1579,392 @@ export default function GameDesignDocument({ onBackToGame, userClubName = "ري�
           )}
 
           {/* =======================================================
-              SECTION 7: DATA PACK MANAGER & APK HUB (حزمة البيانات والتثبيت)
+              SECTION 7: DATA PACK & APK HUB
               ======================================================= */}
           {activeSection === 'datapack' && (
-            <div className="space-y-6 animate-fade-in text-right">
-              
-              <div className="bg-gradient-to-l from-emerald-950/40 to-zinc-900 border border-emerald-500/15 rounded-2xl p-6">
-                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4">
-                  <div className="flex items-center gap-2.5 text-emerald-400">
-                    <Database className="w-6 h-6 animate-pulse" />
-                    <div>
-                      <h2 className="text-xl font-extrabold text-white">7. مدير حزم البيانات والـ APK (Data Pack & APK Workspace)</h2>
-                      <p className="text-[10px] text-emerald-400/80 font-mono tracking-widest mt-0.5">WORLD SOCCER CHAMPS STYLE SYSTEM</p>
-                    </div>
-                  </div>
-                  <button
-                    onClick={handleExportDataPackToFile}
-                    className="bg-emerald-500 hover:bg-emerald-450 text-zinc-950 font-black text-xs px-4 py-2 rounded-xl transition shadow flex items-center gap-1.5"
-                  >
-                    <Download className="w-3.5 h-3.5" /> تصدير حزمة ملف .json للتحميل
-                  </button>
+            <div className="space-y-6 animate-fade-in font-sans text-right" dir="rtl">
+              <div className="bg-zinc-900 border border-zinc-855 rounded-2xl p-6">
+                <div className="flex items-center gap-2 mb-4 text-emerald-450 justify-start flex-row-reverse text-right">
+                  <Database className="w-6 h-6" />
+                  <h2 className="text-xl font-extrabold text-white">7. تخصيص حزم البيانات وملف الـ APK التثبيتي (Datapack & Live Editor Hub)</h2>
                 </div>
-                <p className="text-zinc-350 text-xs leading-relaxed">
-                  أهلاً بك يا كوتش في مركز هندسة المحتوى الكروي! يتيح لك هذا القسم التحكم بنسبة 100% في قاعدة بيانات اللعبة وحزم التراخيص. يمكنك استيراد حزم لتغيير أسماء الأندية واللاعبين الوهمية إلى الأسماء والصور والتقييمات الحقيقية (مثل التحديث الشهير للعبة World Soccer Champs)، بالإضافة لتنفيذ خطوات تجميع اللعبة وتصديرها كملف APK للأندرويد.
-                </p>
-              </div>
 
-              {/* Sub Navigation Inside Hub */}
-              <div className="flex border-b border-zinc-850 gap-1 overflow-x-auto">
-                <button
-                  onClick={() => setActiveTabSub('presets')}
-                  className={`px-4 py-2.5 text-xs font-bold transition flex items-center gap-1.5 whitespace-nowrap ${
-                    activeTabSub === 'presets' ? 'text-emerald-400 border-b-2 border-emerald-500 bg-zinc-900/50 rounded-t-lg' : 'text-zinc-500 hover:text-white'
-                  }`}
-                >
-                  <Layers className="w-3.5 h-3.5" /> حزم بيانات جاهزة (Presets)
-                </button>
-                <button
-                  onClick={() => setActiveTabSub('editor')}
-                  className={`px-4 py-2.5 text-xs font-bold transition flex items-center gap-1.5 whitespace-nowrap ${
-                    activeTabSub === 'editor' ? 'text-emerald-400 border-b-2 border-emerald-500 bg-zinc-900/50 rounded-t-lg' : 'text-zinc-500 hover:text-white'
-                  }`}
-                >
-                  <Edit3 className="w-3.5 h-3.5" /> محرر قاعدة البيانات الحية
-                </button>
-                <button
-                  onClick={() => setActiveTabSub('apk')}
-                  className={`px-4 py-2.5 text-xs font-bold transition flex items-center gap-1.5 whitespace-nowrap ${
-                    activeTabSub === 'apk' ? 'text-emerald-400 border-b-2 border-emerald-500 bg-zinc-900/50 rounded-t-lg' : 'text-zinc-500 hover:text-white'
-                  }`}
-                >
-                  <Smartphone className="w-3.5 h-3.5" /> دليل تجميع ملف APK للاندرويد
-                </button>
-              </div>
+                <div className="text-zinc-300 text-sm leading-relaxed space-y-4">
+                  <p>
+                    يتيح لك هذا القسم تخصيص وتعديل تراخيص الأندية الحقيقية وأسماء نجوم السوپرستار وميزانيات الفرق الحرة للتأثير فوراً في ذكاء خيارات سوق الانتقالات باللعبة. كما يوجهك بكيفية بناء اللعبة كاملة كتطبيق هاتف رسمي مستقل.
+                  </p>
 
-              {/* Sub-tab 1: Preset Packs */}
-              {activeTabSub === 'presets' && (
-                <div className="grid grid-cols-1 md:grid-cols-12 gap-6 animate-fade-in">
-                  <div className="md:col-span-12 lg:col-span-7 space-y-4">
-                    <div className="bg-zinc-900 border border-zinc-850 p-5 rounded-2xl space-y-4">
-                      <div>
-                        <h3 className="text-sm font-bold text-white mb-1">حمّل حزمة بيانات كروية بضغطة زر 👇</h3>
-                        <p className="text-[11px] text-zinc-400">ستقوم هذه الحزم بتغيير معالم اللعبة، كاستبدال الأسماء غير المرخصة بأسماء واقعية لتعيش التحدي الحقيقي!</p>
-                      </div>
-
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        {/* Preset Card 1 */}
-                        <div className="bg-zinc-950 p-4 border border-zinc-800 rounded-xl flex flex-col justify-between hover:border-emerald-500/20 transition group">
-                          <div>
-                            <div className="text-xs font-bold text-emerald-400 mb-1 flex items-center gap-1">
-                              <span>🔥 حزمة النخبة الأوروبية</span>
-                              <span className="text-[9px] bg-emerald-950/50 text-emerald-300 border border-emerald-500/10 px-1 py-0.5 rounded">Real Names</span>
-                            </div>
-                            <p className="text-[10px] text-zinc-500 leading-relaxed mb-3">
-                              تغيير أسماء الأندية (Manchester Athletic ➔ Manchester United) و (Paris Capital ➔ PSG) مع ترخيص أسماء 5 نجوم سوپرستار لكل نادٍ كـ هولاند، وصلاح، ومبابي!
-                            </p>
-                          </div>
-                          <button
-                            onClick={() => handleApplyPreset('europe')}
-                            className="w-full bg-emerald-500 hover:bg-emerald-450 text-zinc-950 font-black text-xs py-2 rounded-lg transition"
-                          >
-                            تطبيق في اللعبة فورياً ⚡
-                          </button>
-                        </div>
-
-                        {/* Preset Card 2 */}
-                        <div className="bg-zinc-950 p-4 border border-zinc-800 rounded-xl flex flex-col justify-between hover:border-emerald-500/20 transition group">
-                          <div>
-                            <div className="text-xs font-bold text-sky-400 mb-1 flex items-center gap-1">
-                              <span>🇸🇦 دوري روشن ومحترفي روشن</span>
-                              <span className="text-[9px] bg-sky-950/50 text-sky-300 border border-sky-500/10 px-1 py-0.5 rounded">Saudi Pro</span>
-                            </div>
-                            <p className="text-[10px] text-zinc-500 leading-relaxed mb-3">
-                              نقل طور مهنة المدرب لـ روشن! تغيير الأندية لتصبح (الهلال، النصر، الاتحاد، الأهلي، الشباب...)، وتوطين الأساطير كريستيانو، بنزيما، نيمار وغيرهم!
-                            </p>
-                          </div>
-                          <button
-                            onClick={() => handleApplyPreset('saudi')}
-                            className="w-full bg-sky-500 hover:bg-sky-450 text-zinc-950 font-black text-xs py-2 rounded-lg transition"
-                          >
-                            تجهيز روشن للتشكيلة 🇸🇦
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Code Editor Preview */}
-                    <div className="bg-zinc-900 border border-zinc-850 p-5 rounded-2xl space-y-3">
-                      <div className="flex justify-between items-center">
-                        <div>
-                          <h4 className="text-xs font-bold text-white">محرر شفرة الـ JSON لحزمة البيانات</h4>
-                          <p className="text-[10px] text-zinc-500 font-mono">Customize structure direct from your browser or write custom entries</p>
-                        </div>
-                        <span className="text-[9px] font-mono text-zinc-650">e.g. "World Soccer Option File"</span>
-                      </div>
-
-                      <textarea
-                        value={datapackCustomJson}
-                        onChange={(e) => setDatapackCustomJson(e.target.value)}
-                        placeholder="ضع شفرة JSON المخصصة لحزمة البيانات هنا..."
-                        className="w-full min-h-[170px] bg-zinc-950 border border-zinc-800 rounded-lg p-3 text-[11px] font-mono text-emerald-400 focus:outline-none focus:border-emerald-500/40 leading-relaxed text-left"
-                        dir="ltr"
-                      />
-
-                      <div className="flex gap-2 justify-end">
-                        <button
-                          onClick={handleApplyCustomJson}
-                          className="bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-300 border border-emerald-500/20 font-bold text-xs px-4 py-2 rounded-xl transition"
-                        >
-                          استيراد وحفظ التعديلات في اللعبة 📥
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* System log and instruction list */}
-                  <div className="md:col-span-12 lg:col-span-5 space-y-4">
-                    {/* Log Terminal console */}
-                    <div className="bg-zinc-950 border border-zinc-850 rounded-2xl p-4 flex flex-col justify-between min-h-[180px] font-mono">
-                      <div className="space-y-1.5">
-                        <div className="flex justify-between items-center border-b border-zinc-900 pb-2 mb-2">
-                          <span className="text-[10px] text-zinc-550 font-bold uppercase">مركز الاتصال وحفظ التراخيص</span>
-                          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
-                        </div>
-                        <div className="space-y-1 text-right max-h-[180px] overflow-y-auto pr-1">
-                          {dataPackLog.map((log, lIdx) => (
-                            <p key={lIdx} className="text-[10px] text-zinc-400 bg-zinc-900/30 p-1.5 rounded leading-relaxed border border-zinc-900">
-                              {log}
-                            </p>
-                          ))}
-                        </div>
-                      </div>
-                      <span className="text-[9px] text-zinc-650 text-left mt-3">FC 26 Engine Database Sync Tool • Active Cache</span>
-                    </div>
-
-                    <div className="bg-zinc-900 border border-zinc-850 p-4 rounded-xl text-[10px] text-center text-zinc-400 leading-relaxed">
-                      💡 <strong>ملاحظة الكوتش:</strong> عند استيراد البيانات، انقر على زر <strong>"تشغيل طور محاكاة مهنة المدرب 🎮"</strong> في الأعلى لمشاهدة التحديثات الحية وتدريب فريقك الأصيل!
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {/* Sub-tab 2: Live Database Editor */}
-              {activeTabSub === 'editor' && (
-                <div className="bg-zinc-900 border border-zinc-850 rounded-2xl p-5 space-y-4 animate-fade-in">
-                  <div>
-                    <h3 className="text-sm font-bold text-white mb-1">محرر العناصر والتقييمات الفورية ✏️</h3>
-                    <p className="text-[11px] text-zinc-400">يمكنك هنا إجراء تعديل مباشر لبيانات أنديتك ولاعبيك في الحفظ النشط، وتغيير مركزهم أو ميزانياتهم الكلية فورياً.</p>
-                  </div>
-
-                  {/* Searching element */}
-                  <div className="flex gap-2">
-                    <input
-                      type="text"
-                      className="flex-1 bg-zinc-950 border border-zinc-800 rounded-xl py-2 px-4 text-xs text-white focus:outline-none focus:border-emerald-500 placeholder:text-zinc-650 text-right"
-                      placeholder="ابحث عن اسم النادي أو اللاعب الذي تريد تعديله وكتابته بالإصدار الحقيقي..."
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                    />
-                    {searchQuery && (
+                  <div className="flex gap-2 border-b border-zinc-800 pb-px mt-4">
+                    {(['presets', 'editor', 'apk'] as const).map((tab) => (
                       <button
-                        onClick={() => setSearchQuery('')}
-                        className="bg-zinc-800 hover:bg-zinc-750 text-zinc-400 px-3 py-1 text-xs rounded-xl"
+                        key={tab}
+                        onClick={() => setActiveTabSub(tab)}
+                        className={`pb-2 px-4 text-xs font-bold transition-all relative cursor-pointer ${
+                          activeTabSub === tab
+                            ? 'text-emerald-400 border-b-2 border-emerald-500 font-extrabold'
+                            : 'text-zinc-500 hover:text-zinc-300'
+                        }`}
                       >
-                        إلغاء الفلتر
+                        {tab === 'presets' ? 'التراخيص الجاهزة وسجلات JSON' : tab === 'editor' ? 'المحرر اليدوي المباشر لقاعدة البيانات' : 'شرح تهيئة الـ APK للهواتف 📱'}
                       </button>
-                    )}
+                    ))}
                   </div>
+                </div>
+              </div>
 
-                  {/* Live edit dialog/forms if selected */}
-                  {editClubId && (
-                    <div className="bg-zinc-950 p-4 border border-emerald-500/25 rounded-xl space-y-3">
-                      <h4 className="text-xs font-bold text-white flex items-center gap-1.5">
-                        <Settings className="w-3.5 h-3.5 text-emerald-400 animate-spin" />
-                        تعديل بيانات النادي المختار:
-                      </h4>
-                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                        <div>
-                          <label className="text-[10px] text-zinc-500 block mb-1">اسم الفريق الجديد:</label>
-                          <input
-                            type="text"
-                            value={editClubName}
-                            onChange={(e) => setEditClubName(e.target.value)}
-                            className="w-full bg-zinc-900 border border-zinc-800 rounded p-2 text-xs text-white"
-                          />
-                        </div>
-                        <div>
-                          <label className="text-[10px] text-zinc-500 block mb-1">الرمز المختصر (3 حروف):</label>
-                          <input
-                            type="text"
-                            maxLength={3}
-                            value={editClubShortName}
-                            onChange={(e) => setEditClubShortName(e.target.value)}
-                            className="w-full bg-zinc-900 border border-zinc-800 rounded p-2 text-xs text-white"
-                          />
-                        </div>
-                        <div>
-                          <label className="text-[10px] text-zinc-500 block mb-1">ميزانية النادي (بالمليون £):</label>
-                          <input
-                            type="number"
-                            value={editClubBudget}
-                            onChange={(e) => setEditClubBudget(Number(e.target.value))}
-                            className="w-full bg-zinc-900 border border-zinc-800 rounded p-2 text-xs text-white"
-                          />
-                        </div>
-                      </div>
-                      <div className="flex justify-end gap-2 text-xs">
-                        <button onClick={() => setEditClubId(null)} className="text-zinc-500 px-3 py-1">إلغاء</button>
-                        <button onClick={handleSaveClubEdit} className="bg-emerald-500 text-zinc-950 font-bold px-4 py-1.5 rounded">حفظ للتحديث</button>
-                      </div>
-                    </div>
-                  )}
-
-                  {editPlayerId && (
-                    <div className="bg-zinc-955 p-4 border border-emerald-500/25 rounded-xl space-y-3">
-                      <h4 className="text-xs font-bold text-white flex items-center gap-1.5">
-                        <Users className="w-3.5 h-3.5 text-emerald-400" />
-                        تعديل بيانات النجم الكروي:
-                      </h4>
-                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                        <div>
-                          <label className="text-[10px] text-zinc-500 block mb-1">اسم اللاعب الكامل:</label>
-                          <input
-                            type="text"
-                            value={editPlayerName}
-                            onChange={(e) => setEditPlayerName(e.target.value)}
-                            className="w-full bg-zinc-900 border border-zinc-800 rounded p-2 text-xs text-white"
-                          />
-                        </div>
-                        <div>
-                          <label className="text-[10px] text-zinc-500 block mb-1">التقييم الكلي (OVR):</label>
-                          <input
-                            type="number"
-                            min={40}
-                            max={99}
-                            value={editPlayerRating}
-                            onChange={(e) => setEditPlayerRating(Number(e.target.value))}
-                            className="w-full bg-zinc-900 border border-zinc-800 rounded p-2 text-xs text-white"
-                          />
-                        </div>
-                        <div>
-                          <label className="text-[10px] text-zinc-500 block mb-1">القدرة المستقبلية الواعدة (POT):</label>
-                          <input
-                            type="number"
-                            min={40}
-                            max={99}
-                            value={editPlayerPotential}
-                            onChange={(e) => setEditPlayerPotential(Number(e.target.value))}
-                            className="w-full bg-zinc-900 border border-zinc-800 rounded p-2 text-xs text-white"
-                          />
-                        </div>
-                      </div>
-                      <div className="flex justify-end gap-2 text-xs">
-                        <button onClick={() => { setEditPlayerId(null); setEditPlayerClubId(null); }} className="text-zinc-500 px-3 py-1">إلغاء</button>
-                        <button onClick={handleSavePlayerEdit} className="bg-emerald-500 text-zinc-950 font-bold px-4 py-1.5 rounded">حفظ وتعديل</button>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* List matching results */}
-                  <div className="space-y-3 max-h-[300px] overflow-y-auto pr-1">
-                    {!gameState ? (
-                      <div className="text-xs text-zinc-500 italic py-6 text-center">
-                        يرجى بدء اللعب لأول مرة لتتمكن من تصفح وتعديل قاعدة الأندية واللاعبين الحية. يمكنك الاعتماد على خيارات صانع الـ JSON بالقسم الأول مرحلياً!
-                      </div>
-                    ) : (
-                      <div className="space-y-4">
-                        {/* Clubs table */}
-                        <div>
-                          <span className="text-[11px] font-bold text-white block mb-1.5">الأندية المتوافقة مع البحث:</span>
-                          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
-                            {gameState.clubs
-                              .filter(c => c.name.toLowerCase().includes(searchQuery.toLowerCase()) || c.shortName.toLowerCase().includes(searchQuery.toLowerCase()))
-                              .map(club => (
-                                <div key={club.id} className="bg-zinc-950 border border-zinc-850 p-2.5 rounded-lg flex justify-between items-center text-xs">
-                                  <div>
-                                    <p className="font-bold text-white">{club.name} ({club.shortName})</p>
-                                    <p className="text-[9px] text-zinc-500 font-mono">Budget: £{club.budget} Millions</p>
-                                  </div>
-                                  <button
-                                    onClick={() => {
-                                      setEditClubId(club.id);
-                                      setEditClubName(club.name);
-                                      setEditClubShortName(club.shortName);
-                                      setEditClubBudget(club.budget);
-                                      setEditPlayerId(null);
-                                    }}
-                                    className="p-1 px-2 border border-zinc-800 text-[10px] bg-zinc-900 text-emerald-400 hover:bg-zinc-800 rounded"
-                                  >
-                                    تعديل الاسم والمالية ✏️
-                                  </button>
-                                </div>
-                              ))}
+              {/* Sub-tab 1: Presets & Custom JSON file */}
+              {activeTabSub === 'presets' && (
+                <div className="space-y-6 animate-fade-in text-right" dir="rtl">
+                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 bg-transparent">
+                    {/* Left database configs */}
+                    <div className="lg:col-span-7 space-y-4">
+                      {/* Presets Cards Grid */}
+                      <div className="bg-zinc-900 border border-zinc-850 p-5 rounded-2xl space-y-4">
+                        <span className="text-[10px] text-zinc-500 block">اضغط لتطبيق ترخيص حزمة بيانات فورية متطابقة مع اللعبة الحالية:</span>
+                        
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                          {/* Preset Card 1 */}
+                          <div className="bg-zinc-950 p-4 border border-zinc-800 rounded-xl flex flex-col justify-between hover:border-emerald-500/20 transition group">
+                            <div>
+                              <div className="text-xs font-bold text-emerald-400 mb-1 flex items-center gap-1">
+                                <span>🔥 حزمة النخبة الأوروبية</span>
+                                <span className="text-[9px] bg-emerald-950/50 text-emerald-300 border border-emerald-500/10 px-1 py-0.5 rounded">Real Names</span>
+                              </div>
+                              <p className="text-[10px] text-zinc-500 leading-relaxed mb-3">
+                                تغيير أسماء الأندية (Manchester Athletic ➔ Manchester United) و (Paris Capital ➔ PSG) مع ترخيص أسماء 5 نجوم سوپرستار لكل نادٍ كـ هولاند، وصلاح، ومبابي!
+                              </p>
+                            </div>
+                            <button
+                              onClick={() => handleApplyPreset('europe')}
+                              className="w-full bg-emerald-500 hover:bg-emerald-450 text-zinc-950 font-black text-xs py-2 rounded-lg transition"
+                            >
+                              تطبيق في اللعبة فورياً ⚡
+                            </button>
                           </div>
-                        </div>
 
-                        {/* Players table matching */}
-                        <div>
-                          <span className="text-[11px] font-bold text-white block mb-1.5">اللاعبين المتوافقين مع البحث:</span>
-                          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
-                            {Object.entries(gameState.playersByClub).flatMap(([clubId, squad]) =>
-                              squad
-                                .filter(p => p.name.toLowerCase().includes(searchQuery.toLowerCase()))
-                                .map(p => ({ p, clubId }))
-                            ).slice(0, 9).map(({ p, clubId }) => {
-                              const clubName = gameState.clubs.find(c => c.id === clubId)?.name || 'حر طليق';
-                              return (
-                                <div key={p.id} className="bg-zinc-950 border border-zinc-850 p-2.5 rounded-lg flex justify-between items-center text-xs">
-                                  <div>
-                                    <p className="font-bold text-white">{p.name}</p>
-                                    <p className="text-[9px] text-zinc-500 font-mono">{clubName} • OVR: {p.rating} | POT: {p.potential}</p>
-                                  </div>
-                                  <button
-                                    onClick={() => {
-                                      setEditPlayerId(p.id);
-                                      setEditPlayerClubId(clubId);
-                                      setEditPlayerName(p.name);
-                                      setEditPlayerRating(p.rating);
-                                      setEditPlayerPotential(p.potential);
-                                      setEditClubId(null);
-                                    }}
-                                    className="p-1 px-2 border border-zinc-800 text-[10px] bg-zinc-900 text-sky-400 hover:bg-zinc-800 rounded"
-                                  >
-                                    رينيم ✏️
-                                  </button>
-                                </div>
-                              );
-                            })}
+                          {/* Preset Card 2 */}
+                          <div className="bg-zinc-950 p-4 border border-zinc-800 rounded-xl flex flex-col justify-between hover:border-emerald-500/20 transition group">
+                            <div>
+                              <div className="text-xs font-bold text-sky-400 mb-1 flex items-center gap-1">
+                                <span>🇸🇦 دوري روشن ومحترفي روشن</span>
+                                <span className="text-[9px] bg-sky-950/50 text-sky-300 border border-sky-500/10 px-1 py-0.5 rounded">Saudi Pro</span>
+                              </div>
+                              <p className="text-[10px] text-zinc-500 leading-relaxed mb-3">
+                                نقل طور مهنة المدرب لـ روشن! تغيير الأندية لتصبح (الهلال، النصر، الاتحاد، الأهلي، الشباب...)، وتوطين الأساطير كريستيانو، بنزيما، نيمار وغيرهم!
+                              </p>
+                            </div>
+                            <button
+                              onClick={() => handleApplyPreset('saudi')}
+                              className="w-full bg-sky-500 hover:bg-sky-450 text-zinc-950 font-black text-xs py-2 rounded-lg transition"
+                            >
+                              تجهيز روشن للتشكيلة 🇸🇦
+                            </button>
                           </div>
                         </div>
                       </div>
-                    )}
+
+                      {/* Code Editor Preview */}
+                      <div className="bg-zinc-900 border border-zinc-850 p-5 rounded-2xl space-y-3">
+                        <div className="flex justify-between items-center">
+                          <div>
+                            <h4 className="text-xs font-bold text-white">محرر شفرة الـ JSON لحزمة البيانات</h4>
+                            <p className="text-[10px] text-zinc-500 font-mono text-left">Customize structure direct from your browser or write custom entries</p>
+                          </div>
+                          <span className="text-[9px] font-mono text-zinc-650">e.g. "World Soccer Option File"</span>
+                        </div>
+
+                        <textarea
+                          value={datapackCustomJson}
+                          onChange={(e) => setDatapackCustomJson(e.target.value)}
+                          placeholder="ضع شفرة JSON المخصصة لحزمة البيانات هنا..."
+                          className="w-full min-h-[170px] bg-zinc-950 border border-zinc-800 rounded-lg p-3 text-[11px] font-mono text-emerald-450 focus:outline-none focus:border-emerald-500/40 leading-relaxed text-left"
+                          dir="ltr"
+                        />
+
+                        <div className="flex gap-2 justify-end">
+                          <button
+                            onClick={handleExportDataPackToFile}
+                            className="bg-zinc-950/20 hover:bg-zinc-900 text-zinc-400 border border-zinc-800 font-bold text-xs px-4 py-2 rounded-xl transition cursor-pointer"
+                          >
+                            تصدير ملف Option File 💾
+                          </button>
+                          <button
+                            onClick={handleApplyCustomJson}
+                            className="bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-300 border border-emerald-500/20 font-bold text-xs px-4 py-2 rounded-xl transition cursor-pointer"
+                          >
+                            استيراد وحفظ التعديلات في اللعبة 📥
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* System log and instruction list */}
+                    <div className="lg:col-span-5 space-y-4">
+                      {/* Log Terminal console */}
+                      <div className="bg-zinc-950 border border-zinc-850 rounded-2xl p-4 flex flex-col justify-between min-h-[180px] font-mono">
+                        <div className="space-y-1.5">
+                          <div className="flex justify-between items-center border-b border-zinc-900 pb-2 mb-2">
+                            <span className="text-[10px] text-zinc-550 font-bold uppercase">مركز الاتصال وحفظ التراخيص</span>
+                            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
+                          </div>
+                          <div className="space-y-1 text-right max-h-[180px] overflow-y-auto pr-1">
+                            {dataPackLog.map((log, lIdx) => (
+                              <p key={lIdx} className="text-[10px] text-zinc-400 bg-zinc-900/30 p-1.5 rounded leading-relaxed border border-zinc-900 font-sans">
+                                {log}
+                              </p>
+                            ))}
+                          </div>
+                        </div>
+                        <span className="text-[9px] text-zinc-650 text-left mt-3">FC 26 Engine Database Sync Tool • Active Cache</span>
+                      </div>
+
+                      <div className="bg-zinc-900 border border-zinc-850 p-4 rounded-xl text-[10px] text-center text-zinc-400 leading-relaxed">
+                        <p>تتم مزامنة هذه الحزمة ميكانيكياً مع شفرة اللعبة. في حال واجهت أي مشاكل في الأسماء أو الميزانيات، يمكنك تحميل حزمة النخبة أو تعديل أي اسم بالمركز اليدوي المباشر.</p>
+                      </div>
+                    </div>
                   </div>
                 </div>
               )}
+
+              {/* Sub-tab 2: Live Hand Editor */}
+              {activeTabSub === 'editor' && (
+                <div className="space-y-6 animate-fade-in text-right" dir="rtl">
+                  <div className="bg-zinc-900 border border-zinc-855 p-5 rounded-2xl space-y-4">
+                    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                      <div>
+                        <h3 className="text-sm font-bold text-white">التحكم اليدوي المباشر بكل نادٍ ونجم (Live Database Editor)</h3>
+                        <p className="text-[10px] text-zinc-500 mt-1">ابحث باسم اللاعب أو النادي لتحديث خصائصهم وتعديل أسمائهم وقوتهم المفرطة فوراً بالتشكيلة الأساسية!</p>
+                      </div>
+
+                      <input
+                        type="text"
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        placeholder="ابحث عن لاعب أو نادي هنا..."
+                        className="bg-zinc-950 border border-zinc-800 p-2 text-xs rounded-lg text-white font-sans max-w-xs w-full placeholder:text-zinc-600 focus:outline-none focus:border-emerald-500/40"
+                      />
+                    </div>
+
+                    {/* Edit Player view Form */}
+                    {editPlayerId && (
+                      <div className="bg-zinc-955 p-4 border border-emerald-500/25 rounded-xl space-y-3">
+                        <h4 className="text-xs font-bold text-white flex items-center gap-1.5 justify-start">
+                          <Users className="w-3.5 h-3.5 text-emerald-400" />
+                          تعديل بيانات النجم الكروي:
+                        </h4>
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                          <div>
+                            <label className="text-[10px] text-zinc-500 block mb-1">اسم اللاعب الكامل:</label>
+                            <input
+                              type="text"
+                              value={editPlayerName}
+                              onChange={(e) => setEditPlayerName(e.target.value)}
+                              className="w-full bg-zinc-900 border border-zinc-800 rounded p-2 text-xs text-white"
+                            />
+                          </div>
+                          <div>
+                            <label className="text-[10px] text-zinc-500 block mb-1">التقييم الكلي (OVR):</label>
+                            <input
+                              type="number"
+                              min={40}
+                              max={99}
+                              value={editPlayerRating}
+                              onChange={(e) => setEditPlayerRating(Number(e.target.value))}
+                              className="w-full bg-zinc-900 border border-zinc-800 rounded p-2 text-xs text-white"
+                            />
+                          </div>
+                          <div>
+                            <label className="text-[10px] text-zinc-500 block mb-1">القدرة المستقبلية الواعدة (POT):</label>
+                            <input
+                              type="number"
+                              min={40}
+                              max={99}
+                              value={editPlayerPotential}
+                              onChange={(e) => setEditPlayerPotential(Number(e.target.value))}
+                              className="w-full bg-zinc-900 border border-zinc-800 rounded p-2 text-xs text-white"
+                            />
+                          </div>
+                        </div>
+                        <div className="flex justify-end gap-2 text-xs">
+                          <button onClick={() => { setEditPlayerId(null); setEditPlayerClubId(null); }} className="text-zinc-500 px-3 py-1 cursor-pointer">إلغاء</button>
+                          <button onClick={handleSavePlayerEdit} className="bg-emerald-500 text-zinc-950 font-bold px-4 py-1.5 rounded cursor-pointer hover:bg-emerald-400 font-bold">حفظ وتعديل</button>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Edit Club view Form */}
+                    {editClubId && (
+                      <div className="bg-zinc-955 p-4 border border-emerald-500/25 rounded-xl space-y-3">
+                        <h4 className="text-xs font-bold text-white flex items-center gap-1.5 justify-start">
+                          <Landmark className="w-3.5 h-3.5 text-emerald-400" />
+                          تعديل تفاصيل وأموال الفريق المالي:
+                        </h4>
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                          <div>
+                            <label className="text-[10px] text-zinc-500 block mb-1">اسم غلاف النادي الكامل:</label>
+                            <input
+                              type="text"
+                              value={editClubName}
+                              onChange={(e) => setEditClubName(e.target.value)}
+                              className="w-full bg-zinc-900 border border-zinc-800 rounded p-2 text-xs text-white"
+                            />
+                          </div>
+                          <div>
+                            <label className="text-[10px] text-zinc-500 block mb-1">الاسم القصير المكون من 3 أحرف:</label>
+                            <input
+                              type="text"
+                              maxLength={3}
+                              value={editClubShortName}
+                              onChange={(e) => setEditClubShortName(e.target.value)}
+                              className="w-full bg-zinc-900 border border-zinc-800 rounded p-2 text-xs text-white"
+                            />
+                          </div>
+                          <div>
+                            <label className="text-[10px] text-zinc-500 block mb-1">الميزانية الحالية المتوفرة (بالمليون £):</label>
+                            <input
+                              type="number"
+                              min={1}
+                              value={editClubBudget}
+                              onChange={(e) => setEditClubBudget(Number(e.target.value))}
+                              className="w-full bg-zinc-900 border border-zinc-800 rounded p-2 text-xs text-white"
+                            />
+                          </div>
+                        </div>
+                        <div className="flex justify-end gap-2 text-xs">
+                          <button onClick={() => setEditClubId(null)} className="text-zinc-500 px-3 py-1 cursor-pointer">إلغاء</button>
+                          <button onClick={handleSaveClubEdit} className="bg-emerald-500 text-zinc-950 font-bold px-4 py-1.5 rounded cursor-pointer hover:bg-emerald-400 font-bold">حفظ وتعديل</button>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* List matching results */}
+                    <div className="space-y-3 max-h-[300px] overflow-y-auto pr-1">
+                      {!gameState ? (
+                        <div className="text-xs text-zinc-500 italic py-6 text-center">
+                          يرجى بدء اللعب لأول مرة لتتمكن من تصفح وتعديل قاعدة الأندية واللاعبين الحية. يمكنك الاعتماد على خيارات صانع الـ JSON بالقسم الأول مرحلياً!
+                        </div>
+                      ) : (
+                        <div className="space-y-4">
+                          {/* Clubs table */}
+                          <div>
+                            <span className="text-[11px] font-bold text-white block mb-1.5 text-right">الأندية المتوافقة مع البحث:</span>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
+                              {gameState.clubs
+                                .filter(c => c.name.toLowerCase().includes(searchQuery.toLowerCase()) || c.shortName.toLowerCase().includes(searchQuery.toLowerCase()))
+                                .map(club => (
+                                  <div key={club.id} className="bg-zinc-950 border border-zinc-850 p-2.5 rounded-lg flex justify-between items-center text-xs">
+                                    <div>
+                                      <p className="font-bold text-white text-right">{club.name} ({club.shortName})</p>
+                                      <p className="text-[9px] text-zinc-500 font-mono text-right">Budget: £{club.budget} Millions</p>
+                                    </div>
+                                    <button
+                                      onClick={() => {
+                                        setEditClubId(club.id);
+                                        setEditClubName(club.name);
+                                        setEditClubShortName(club.shortName);
+                                        setEditClubBudget(club.budget);
+                                        setEditPlayerId(null);
+                                      }}
+                                      className="p-1 px-2 border border-zinc-800 text-[10px] bg-zinc-900 text-emerald-400 hover:bg-zinc-800 rounded cursor-pointer"
+                                    >
+                                      تعديل ✏️
+                                    </button>
+                                  </div>
+                                ))}
+                            </div>
+                          </div>
+
+                          {/* Players table matching */}
+                          <div>
+                            <span className="text-[11px] font-bold text-white block mb-1.5 text-right">اللاعبين المتوافقين مع البحث:</span>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
+                              {Object.entries(gameState.playersByClub).flatMap(([clubId, squad]) =>
+                                squad
+                                  .filter(p => p.name.toLowerCase().includes(searchQuery.toLowerCase()))
+                                  .map(p => ({ p, clubId }))
+                              ).slice(0, 9).map(({ p, clubId }) => {
+                                const clubName = gameState.clubs.find(c => c.id === clubId)?.name || 'حر طليق';
+                                return (
+                                  <div key={p.id} className="bg-zinc-950 border border-zinc-850 p-2.5 rounded-lg flex justify-between items-center text-xs">
+                                    <div>
+                                      <p className="font-bold text-white text-right">{p.name}</p>
+                                      <p className="text-[9px] text-zinc-500 font-mono text-right">{clubName} • OVR: {p.rating} | POT: {p.potential}</p>
+                                    </div>
+                                    <button
+                                      onClick={() => {
+                                        setEditPlayerId(p.id);
+                                        setEditPlayerClubId(clubId);
+                                        setEditPlayerName(p.name);
+                                        setEditPlayerRating(p.rating);
+                                        setEditPlayerPotential(p.potential);
+                                        setEditClubId(null);
+                                      }}
+                                      className="p-1 px-2 border border-zinc-800 text-[10px] bg-zinc-900 text-sky-400 hover:bg-zinc-800 rounded cursor-pointer"
+                                    >
+                                      تعديل ✏️
+                                    </button>
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              )}
+                <p className="text-xs text-zinc-350 leading-relaxed text-justify">
+                    اللعبة الآن مجهزة للعمل فورياً كتطبيق native فائق السرعة على الهواتف من خلال خطوة بسيطة جداً على حاسوبك الشخصي:
+                  </p>
+
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    {/* Step Card 1 */}
+                    <div className="bg-zinc-950 p-4 border border-zinc-800 rounded-xl space-y-2">
+                      <div className="text-xs font-black text-emerald-400 flex items-center gap-1.5 justify-start">
+                        <span className="w-5 h-5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/15 flex items-center justify-center font-mono">1</span>
+                        <span>تحميل مشروع ZIP</span>
+                      </div>
+                      <p className="text-[11px] text-zinc-400 leading-relaxed">
+                        اذهب لقائمة الإعدادات في أعلى يمين واجهة <strong>AI Studio</strong>، واضغط على زر <strong>"Export as ZIP"</strong> لتحميل ملفات اللعبة بالكامل على حاسوبك الشخصي وفك الضغط عنها.
+                      </p>
+                    </div>
+
+                    {/* Step Card 2 */}
+                    <div className="bg-zinc-950 p-4 border border-zinc-800 rounded-xl space-y-2">
+                      <div className="text-xs font-black text-emerald-400 flex items-center gap-1.5 justify-start">
+                        <span className="w-5 h-5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/15 flex items-center justify-center font-mono">2</span>
+                        <span>فتح مجلد Android بالاستوديو</span>
+                      </div>
+                      <p className="text-[11px] text-zinc-400 leading-relaxed">
+                        قم بتنزيل برنامج <strong>Android Studio</strong> المجاني وافتحه، ثم اختر <strong>Open an Existing Project</strong> وحدد المجلد الجاهز المسمى <code>android</code> الموجود داخل ملفات كود اللعبة المستخرجة.
+                      </p>
+                    </div>
+
+                    {/* Step Card 3 */}
+                    <div className="bg-zinc-950 p-4 border border-zinc-800 rounded-xl space-y-2">
+                      <div className="text-xs font-black text-sky-400 flex items-center gap-1.5 justify-start">
+                        <span className="w-5 h-5 rounded-full bg-sky-500/10 text-sky-400 border border-sky-500/15 flex items-center justify-center font-mono">3</span>
+                        <span>تجميع ملف الـ APK 📲</span>
+                      </div>
+                      <p className="text-[11px] text-zinc-400 leading-relaxed">
+                        انتظر ثوانٍ معدودة ريثما ينهي Android Studio تهيئة ملفات الـ Gradle تلقائياً، وتوجه ببساطة نحو القائمة العلوية واضغط على:
+                        <br /><strong>Build ➔ Build Bundle(s) / APK(s) ➔ Build APK(s)</strong>. مبارك عليك! سيتولد ملف apk أصلي في ثوانٍ!
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Command utility for advanced developers */}
+                  <div className="bg-zinc-950 p-4 border border-zinc-850 rounded-xl space-y-2 text-left" dir="ltr">
+                    <span className="text-[10px] text-zinc-550 font-bold uppercase tracking-wider block font-mono">Commands pre-configured & pre-run in workspace by Google Coding Agent:</span>
+                    <pre className="bg-zinc-900 border border-zinc-800 p-2.5 rounded text-[10px] font-mono text-emerald-450 overflow-x-auto">
+{`# All of these have been completed inside this live workspace for you:
+npm install @capacitor/core @capacitor/android @capacitor/cli
+npm run build (vite web assets -> dist/)
+npx cap add android
+npx cap sync`}
+                    </pre>
+                  </div>
 
               {/* Sub-tab 3: APK Compiling Steps */}
               {activeTabSub === 'apk' && (

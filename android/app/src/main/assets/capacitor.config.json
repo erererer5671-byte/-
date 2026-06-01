@@ -1,0 +1,6 @@
+{
+	"appId": "com.football.soccerchamps",
+	"appName": "World Soccer Career",
+	"webDir": "dist",
+	"bundledWebRuntime": false
+}
